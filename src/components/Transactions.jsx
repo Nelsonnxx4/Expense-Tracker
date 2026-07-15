@@ -1,14 +1,14 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useContext } from "react";
+import React from "react";
 import { useGetTransactions } from "../hooks/useGetTransactions";
-import { TagContext } from "../context/TagContext";
+import { useAppSelector } from "../store/hooks";
 import Spinner from "./Spinner";
 
 const Transactions = () => {
   const { transactions, isTransactionAvailable, dayTotal } =
     useGetTransactions();
 
-  const { isLoading } = useContext(TagContext);
+  const isLoading = useAppSelector((state) => state.tag.isLoading);
   if (!isTransactionAvailable && isLoading)
     return (
       <>

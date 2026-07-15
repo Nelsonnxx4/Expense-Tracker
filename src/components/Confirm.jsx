@@ -1,20 +1,23 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { LockClosedOutline, ArrowForwardOutline } from "react-ionicons";
-import { ConfirmContext } from "../context/ConfirmContext";
-import { DarkModeContext } from "../context/DarkModeContext";
-import { AddExpenseContext } from "../context/AddExpenseContext"
-import { TagContext } from "../context/TagContext";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { closeConfirmation } from "../store/slices/confirmSlice";
+import { closePopup } from "../store/slices/addExpenseSlice";
+import { setIsLoading as setTagIsLoading } from "../store/slices/tagSlice";
 import { useAddTransaction } from "../hooks/useAddTransaction";
 import Spinner from './Spinner';
 
 const Confirm = ({ transactionAmount }) => {
 	const { addTransaction } = useAddTransaction();
-	const { handleCloseConfirmation, selected } = useContext(ConfirmContext);
-	const { darkMode } = useContext(DarkModeContext);
-	const { handleClosePopup } = useContext(AddExpenseContext);
-	const {isLoading, setIsLoading}= useContext(TagContext)
+	const dispatch = useAppDispatch();
+	const selected = useAppSelector((state) => state.confirm.selected);
+	const handleCloseConfirmation = () => dispatch(closeConfirmation());
+	const darkMode = useAppSelector((state) => state.darkMode.darkMode);
+	const handleClosePopup = () => dispatch(closePopup());
+	const isLoading = useAppSelector((state) => state.tag.isLoading);
+	const setIsLoading = (value) => dispatch(setTagIsLoading(value));
 	const {emoji, value} = selected;
 	
 	const navigate= useNavigate();

@@ -1,8 +1,9 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CloseCircleOutline } from "react-ionicons";
-import { TagContext } from "../context/TagContext";
-import { CreateTagContext } from "../context/CreateTagContext";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { closeTagList, setIsLoading as setTagIsLoading } from "../store/slices/tagSlice";
+import { openCreateTag as openCreateTagAction } from "../store/slices/createTagSlice";
 import CreateTag from "./CreateTag";
 
 import { db } from "../firebase/FirebaseConfig";
@@ -35,7 +36,9 @@ const TagList = ({ onSelect }) => {
     //   value: "subscription",
     // },
   ]);
-  const { isLoading, setIsLoading } = useContext(TagContext);
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector((state) => state.tag.isLoading);
+  const setIsLoading = (value) => dispatch(setTagIsLoading(value));
   useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => {
@@ -48,8 +51,9 @@ const TagList = ({ onSelect }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  const { handleCloseTagList } = useContext(TagContext);
-  const { handleOpenCreateTag, openCreateTag } = useContext(CreateTagContext);
+  const handleCloseTagList = () => dispatch(closeTagList());
+  const openCreateTag = useAppSelector((state) => state.createTag.openCreateTag);
+  const handleOpenCreateTag = () => dispatch(openCreateTagAction());
   const handleSelect = (item) => {
     onSelect(item);
     handleCloseTagList();

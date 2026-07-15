@@ -1,17 +1,19 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { ArrowBackCircleOutline } from "react-ionicons";
 import { db } from "../firebase/FirebaseConfig";
-import { CreateTagContext } from "../context/CreateTagContext";
-import { DarkModeContext } from "../context/DarkModeContext";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { closeCreateTag } from "../store/slices/createTagSlice";
+import { setIsLoading as setTagIsLoading } from "../store/slices/tagSlice";
 import { addDoc, collection } from "firebase/firestore";
 import Spinner from "./Spinner";
 import { Toaster, toast } from 'sonner'
-import { TagContext } from "../context/TagContext";
 const CreateTag = () => {
-	const { handleCloseCreateTag } = useContext(CreateTagContext);
-	const { darkMode } = useContext(DarkModeContext);
-	const { isLoading, setIsLoading } = useContext(TagContext);
+	const dispatch = useAppDispatch();
+	const handleCloseCreateTag = () => dispatch(closeCreateTag());
+	const darkMode = useAppSelector((state) => state.darkMode.darkMode);
+	const isLoading = useAppSelector((state) => state.tag.isLoading);
+	const setIsLoading = (value) => dispatch(setTagIsLoading(value));
 	const [tag, setTag] = useState({
 		emoji: "",
 		value: ""

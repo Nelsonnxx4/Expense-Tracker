@@ -1,12 +1,15 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useContext } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Moon, LogOutOutline, SunnyOutline } from "react-ionicons";
-import { DarkModeContext } from "../context/DarkModeContext";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { toggleDarkMode } from "../store/slices/darkModeSlice";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/FirebaseConfig";
 const Header = () => {
-	const { darkMode, handleToggleDarkMode } = useContext(DarkModeContext);
+	const darkMode = useAppSelector((state) => state.darkMode.darkMode);
+	const dispatch = useAppDispatch();
+	const handleToggleDarkMode = () => dispatch(toggleDarkMode());
 
 	const navigate= useNavigate();
 	const logout = async () => {

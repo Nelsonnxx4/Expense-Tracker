@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Toaster, toast } from "sonner";
 import {
   ArrowDownOutline,
@@ -8,19 +8,27 @@ import {
 } from "react-ionicons";
 import TagList from "./TagList";
 import Confirm from "./Confirm";
-import { AddExpenseContext } from "../context/AddExpenseContext";
-import { TagContext } from "../context/TagContext";
-import { ConfirmContext } from "../context/ConfirmContext";
-import { TransactionContext } from "../context/TransactionContext";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { closePopup } from "../store/slices/addExpenseSlice";
+import { openTagList } from "../store/slices/tagSlice";
+import { setConfirmation as setConfirmationAction, setSelected as setSelectedAction } from "../store/slices/confirmSlice";
+import { setTransactionAmount as setTransactionAmountAction } from "../store/slices/transactionSlice";
 
 const AddExpense = () => {
-  const { handleOpenTagList, isTagOpen } = useContext(TagContext);
+  const dispatch = useAppDispatch();
+  const isTagOpen = useAppSelector((state) => state.tag.isTagOpen);
+  const handleOpenTagList = () => dispatch(openTagList());
   const [date, setDate] = useState(new Date());
-  const { handleClosePopup } = useContext(AddExpenseContext);
-  const { confirmation, setConfirmation, setSelected, selected } =
-    useContext(ConfirmContext);
-  const { transactionAmount, setTransactionAmount } =
-    useContext(TransactionContext);
+  const handleClosePopup = () => dispatch(closePopup());
+  const confirmation = useAppSelector((state) => state.confirm.confirmation);
+  const selected = useAppSelector((state) => state.confirm.selected);
+  const setConfirmation = (value) => dispatch(setConfirmationAction(value));
+  const setSelected = (value) => dispatch(setSelectedAction(value));
+  const transactionAmount = useAppSelector(
+    (state) => state.transaction.transactionAmount
+  );
+  const setTransactionAmount = (value) =>
+    dispatch(setTransactionAmountAction(value));
 
   const handleOpenConfirmation = () => {
     if (!selected || !transactionAmount) {

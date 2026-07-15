@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   query,
   collection,
@@ -7,7 +7,8 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "../firebase/FirebaseConfig";
-import { TagContext } from "../context/TagContext";
+import { useAppDispatch } from "../store/hooks";
+import { setIsLoading as setTagIsLoading } from "../store/slices/tagSlice";
 import { useGetUserInfo } from "./useGetUserInfo";
 
 export const useGetTransactions = () => {
@@ -22,7 +23,8 @@ export const useGetTransactions = () => {
   today.setHours(0, 0, 0, 0);
 
   const [isTransactionAvailable, setIsTransactionAvailable] = useState(false);
-  const { setIsLoading } = useContext(TagContext);
+  const dispatch = useAppDispatch();
+  const setIsLoading = (value) => dispatch(setTagIsLoading(value));
 
   const transColRef = collection(db, "transactions");
   const { userID } = useGetUserInfo();

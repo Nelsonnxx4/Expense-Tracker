@@ -1,13 +1,17 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useContext } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Person, PieChartOutline } from "react-ionicons";
-import { DarkModeContext } from "../context/DarkModeContext";
-import { AddExpenseContext } from "../context/AddExpenseContext";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { openPopup } from "../store/slices/addExpenseSlice";
 import AddExpense from "./AddExpense";
 const Footer = () => {
-	const { darkMode } = useContext(DarkModeContext);
-	const { handleOpenPopup, popupAddExpense } = useContext(AddExpenseContext);
+	const darkMode = useAppSelector((state) => state.darkMode.darkMode);
+	const popupAddExpense = useAppSelector(
+		(state) => state.addExpense.popupAddExpense
+	);
+	const dispatch = useAppDispatch();
+	const handleOpenPopup = () => dispatch(openPopup());
 
 	if (popupAddExpense)
 		return (
