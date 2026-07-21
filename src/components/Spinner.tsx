@@ -1,5 +1,3 @@
-// eslin t-dis able-next-line no-unused-vars
-import React from "react";
 import "./Spinner.css";
 const Spinner = () => {
 	return (

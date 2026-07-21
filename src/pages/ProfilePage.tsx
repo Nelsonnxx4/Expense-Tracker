@@ -1,5 +1,3 @@
-// eslint-disable-next-line no-unused-vars
-import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useGetUserInfo } from "../hooks/useGetUserInfo";
@@ -13,7 +11,7 @@ const ProfilePage = () => {
 			<Header />
 				<h1 className="text-xl pl-3 pb-3">profile</h1>
 				<div className="flex justify-between items-center flex-row px-3">
-				<img src={profilePhoto} alt="profilephoto" className="rounded-full h-16"/>
+				<img src={profilePhoto ?? undefined} alt="profilephoto" className="rounded-full h-16"/>
 				<h2>{name}</h2>
 				</div>
 		</div>

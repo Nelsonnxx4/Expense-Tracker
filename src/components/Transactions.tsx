@@ -1,5 +1,3 @@
-// eslint-disable-next-line no-unused-vars
-import React from "react";
 import { useGetTransactions } from "../hooks/useGetTransactions";
 import { useAppSelector } from "../store/hooks";
 import Spinner from "./Spinner";
@@ -31,7 +29,7 @@ const Transactions = () => {
             <span className="text-xl text-right">-{dayTotal}$</span>
             <>
               {transactions.map((transaction) => {
-                const { index, emoji, value, transactionAmount, createdAt } =
+                const { id, emoji, value, transactionAmount, createdAt } =
                   transaction;
 
                 const createdAtDate = createdAt?.toDate();
@@ -53,7 +51,7 @@ const Transactions = () => {
                 return (
                   <li
                     className="flex justify-between items-center w-full space-y-2"
-                    key={index}
+                    key={id}
                   >
                     <div className="flex justify-between items-center space-x-3">
                       <span className="text-4xl">{emoji}</span>

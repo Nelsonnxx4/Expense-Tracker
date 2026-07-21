@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import { useState } from "react";
 import { Toaster, toast } from "sonner";
 import {
   ArrowDownOutline,
@@ -13,21 +12,22 @@ import { closePopup } from "../store/slices/addExpenseSlice";
 import { openTagList } from "../store/slices/tagSlice";
 import { setConfirmation as setConfirmationAction, setSelected as setSelectedAction } from "../store/slices/confirmSlice";
 import { setTransactionAmount as setTransactionAmountAction } from "../store/slices/transactionSlice";
+import type { Tag } from "../types/tag";
 
 const AddExpense = () => {
   const dispatch = useAppDispatch();
   const isTagOpen = useAppSelector((state) => state.tag.isTagOpen);
   const handleOpenTagList = () => dispatch(openTagList());
-  const [date, setDate] = useState(new Date());
+  const [date] = useState(new Date());
   const handleClosePopup = () => dispatch(closePopup());
   const confirmation = useAppSelector((state) => state.confirm.confirmation);
   const selected = useAppSelector((state) => state.confirm.selected);
-  const setConfirmation = (value) => dispatch(setConfirmationAction(value));
-  const setSelected = (value) => dispatch(setSelectedAction(value));
+  const setConfirmation = (value: boolean) => dispatch(setConfirmationAction(value));
+  const setSelected = (value: Tag) => dispatch(setSelectedAction(value));
   const transactionAmount = useAppSelector(
     (state) => state.transaction.transactionAmount
   );
-  const setTransactionAmount = (value) =>
+  const setTransactionAmount = (value: number | string) =>
     dispatch(setTransactionAmountAction(value));
 
   const handleOpenConfirmation = () => {
@@ -37,7 +37,7 @@ const AddExpense = () => {
       setConfirmation(true);
     }
   };
-  const handleSelect = (item) => {
+  const handleSelect = (item: Tag) => {
     setSelected(item);
   };
   if (isTagOpen)
@@ -49,15 +49,12 @@ const AddExpense = () => {
   if (confirmation)
     return (
       <>
-        <Confirm
-          transactionAmount={transactionAmount}
-          setTransactionAmount={setTransactionAmount}
-        />
+        <Confirm transactionAmount={transactionAmount} />
       </>
     );
   return (
     <>
-      <Toaster richColors Error position="top-right" />
+      <Toaster richColors position="top-right" />
       <section className="flex justify-center text-slate-400 items-center flex-col fixed text-xl  z-10 h-full bg-white bg-opacity-70 backdrop-blur-sm -mr-4 bottom-2/3 dark:bg-black dark:bg-opacity-60 dark:text-white w-full  translate-y-2/3 translate-x-0 sm:w-full sm:translate-x-1/4 md:w-full md:translate-x-1/2 lg:w-2/5 lg:translate-x-3/4 transition ease-linear">
         <div>
           <p className="text-lg text-center font-thin">

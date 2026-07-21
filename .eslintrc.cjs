@@ -18,4 +18,19 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
+  overrides: [
+    {
+      files: ['**/*.ts', '**/*.tsx'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
+      plugins: ['@typescript-eslint'],
+      extends: ['plugin:@typescript-eslint/recommended'],
+      rules: {
+        // TS already enforces prop/type shapes; PropTypes are redundant here.
+        'react/prop-types': 'off',
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': 'error',
+      },
+    },
+  ],
 }

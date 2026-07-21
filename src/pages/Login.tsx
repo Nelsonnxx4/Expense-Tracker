@@ -1,15 +1,14 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useEffect, useState } from "react";
 import { auth, provider } from "../firebase/FirebaseConfig";
 import { signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import type { AuthInfo } from "../types/auth";
 
 const Login = () => {
 	const navigate = useNavigate();
 
 	const loginWithGoogle = async () => {
 		const results =await signInWithPopup(auth, provider);
-		const authInfo={
+		const authInfo: AuthInfo={
 			userID: results.user.uid,
 			name: results.user.displayName,
 			profilePhoto:results.user.photoURL,
@@ -17,7 +16,7 @@ const Login = () => {
 		}
 		localStorage.setItem("auth", JSON.stringify(authInfo))
 		navigate('/home')
-		
+
 	};
 	return (
 				<section className="bg-stone-200 ">

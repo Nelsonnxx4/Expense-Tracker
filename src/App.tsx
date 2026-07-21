@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import AnalyticPage from "./pages/AnalyticPage";
 import HomePage from "./pages/HomePage";
@@ -18,7 +17,7 @@ const App = () => {
 	return (
 		<Router>
 			<Routes>
-				<Route exact path="/" element={<Login />} />
+				<Route path="/" element={<Login />} />
 				<Route path="/home" element={<HomePage />} />
 				<Route path="/analytics" element={<AnalyticPage />} />
 				<Route path="/profile" element={<ProfilePage />} />

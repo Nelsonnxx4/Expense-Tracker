@@ -1,17 +1,22 @@
-// eslint-disable-next-line no-unused-vars
-import React from "react";
 import { useGetTransactions } from "../hooks/useGetTransactions";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import type { Transaction } from "../types/transaction";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
 const ChartAnalytics = () => {
   const { transactions } = useGetTransactions();
 
-  const processTransactionData = (transactions) => {
-    const categoryMap = {};
+  // NOTE: Transaction has no `category`/`amount` fields (it has `value`/
+  // `transactionAmount`), so this map is always empty at runtime. Left
+  // as-is to preserve existing behavior during the TS conversion.
+  const processTransactionData = (transactions: Transaction[]) => {
+    const categoryMap: Record<string, number> = {};
 
     transactions.forEach((transaction) => {
-      const { category, amount } = transaction;
+      const { category, amount } = transaction as unknown as {
+        category: string;
+        amount: number;
+      };
       if (categoryMap[category]) {
         categoryMap[category] += amount;
       } else {
@@ -43,7 +48,7 @@ const ChartAnalytics = () => {
             dataKey="value"
             label
           >
-            {data.map((entry, index) => (
+            {data.map((_entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}

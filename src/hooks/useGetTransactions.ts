@@ -10,13 +10,14 @@ import { db } from "../firebase/FirebaseConfig";
 import { useAppDispatch } from "../store/hooks";
 import { setIsLoading as setTagIsLoading } from "../store/slices/tagSlice";
 import { useGetUserInfo } from "./useGetUserInfo";
+import type { Transaction, TransactionTotal } from "../types/transaction";
 
 export const useGetTransactions = () => {
-  const [transactions, setTransactions] = useState([]);
-  const [transactionTotal, setTransactionTotal] = useState({
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactionTotal, setTransactionTotal] = useState<TransactionTotal>({
     expenses: 0.0,
   });
-  const [dayTotal, setDayTotal] = useState(null);
+  const [dayTotal, setDayTotal] = useState<number | null>(null);
 
   // FUNCTIONALITY FOR A DAY SPENDING
   const today = new Date();
@@ -24,26 +25,27 @@ export const useGetTransactions = () => {
 
   const [isTransactionAvailable, setIsTransactionAvailable] = useState(false);
   const dispatch = useAppDispatch();
-  const setIsLoading = (value) => dispatch(setTagIsLoading(value));
+  const setIsLoading = (value: boolean) => dispatch(setTagIsLoading(value));
 
   const transColRef = collection(db, "transactions");
   const { userID } = useGetUserInfo();
 
   const getTransactions = async () => {
-    let unsubscribe;
+    let unsubscribe: () => void = () => {};
     try {
       const queryTransactions = query(
         transColRef,
-        where("userID", "==", userID, "createdAt", ">=", today),
+        where("userID", "==", userID),
+        where("createdAt", ">=", today),
         orderBy("createdAt", "desc")
       );
 
       unsubscribe = onSnapshot(queryTransactions, (snapshot) => {
-        let docs = [];
+        const docs: Transaction[] = [];
         let totalExpenses = 0;
 
         snapshot.forEach((doc) => {
-          const data = doc.data();
+          const data = doc.data() as Omit<Transaction, "id">;
           const id = doc.id;
 
           docs.push({ ...data, id });
@@ -54,7 +56,7 @@ export const useGetTransactions = () => {
         });
         setDayTotal(totalExpenses);
         setTransactions(docs);
-        setIsTransactionAvailable(transactions);
+        setIsTransactionAvailable(docs.length > 0);
         setTransactionTotal({
           expenses: totalExpenses,
         });

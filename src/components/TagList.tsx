@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CloseCircleOutline } from "react-ionicons";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { closeTagList, setIsLoading as setTagIsLoading } from "../store/slices/tagSlice";
@@ -9,8 +8,14 @@ import CreateTag from "./CreateTag";
 import { db } from "../firebase/FirebaseConfig";
 import { collection, onSnapshot } from "firebase/firestore";
 import Spinner from "./Spinner";
-const TagList = ({ onSelect }) => {
-  const [tags, setTags] = useState([
+import type { Tag } from "../types/tag";
+
+interface TagListProps {
+  onSelect: (tag: Tag) => void;
+}
+
+const TagList = ({ onSelect }: TagListProps) => {
+  const [tags, setTags] = useState<Tag[]>([
     // {
     //   emoji: "🏠",
     //   value: "rent",
@@ -38,12 +43,14 @@ const TagList = ({ onSelect }) => {
   ]);
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => state.tag.isLoading);
-  const setIsLoading = (value) => dispatch(setTagIsLoading(value));
+  const setIsLoading = (value: boolean) => dispatch(setTagIsLoading(value));
   useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => {
       onSnapshot(collection(db, "tags"), (snapshot) => {
-        setTags(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        setTags(
+          snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Tag)
+        );
         setIsLoading(false);
         console.log(tags);
       });
@@ -54,7 +61,7 @@ const TagList = ({ onSelect }) => {
   const handleCloseTagList = () => dispatch(closeTagList());
   const openCreateTag = useAppSelector((state) => state.createTag.openCreateTag);
   const handleOpenCreateTag = () => dispatch(openCreateTagAction());
-  const handleSelect = (item) => {
+  const handleSelect = (item: Tag) => {
     onSelect(item);
     handleCloseTagList();
   };

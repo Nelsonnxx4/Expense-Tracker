@@ -1,5 +1,3 @@
-// eslint-disable-next-line no-unused-vars
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { LockClosedOutline, ArrowForwardOutline } from "react-ionicons";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -9,7 +7,11 @@ import { setIsLoading as setTagIsLoading } from "../store/slices/tagSlice";
 import { useAddTransaction } from "../hooks/useAddTransaction";
 import Spinner from './Spinner';
 
-const Confirm = ({ transactionAmount }) => {
+interface ConfirmProps {
+	transactionAmount: number | string;
+}
+
+const Confirm = ({ transactionAmount }: ConfirmProps) => {
 	const { addTransaction } = useAddTransaction();
 	const dispatch = useAppDispatch();
 	const selected = useAppSelector((state) => state.confirm.selected);
@@ -17,14 +19,14 @@ const Confirm = ({ transactionAmount }) => {
 	const darkMode = useAppSelector((state) => state.darkMode.darkMode);
 	const handleClosePopup = () => dispatch(closePopup());
 	const isLoading = useAppSelector((state) => state.tag.isLoading);
-	const setIsLoading = (value) => dispatch(setTagIsLoading(value));
-	const {emoji, value} = selected;
-	
+	const setIsLoading = (value: boolean) => dispatch(setTagIsLoading(value));
+	const { emoji, value } = selected!;
+
 	const navigate= useNavigate();
 	const handleAddTransaction=()=>{
 		setIsLoading(true)
 		addTransaction({
-			emoji, value, transactionAmount
+			emoji, value, transactionAmount: Number(transactionAmount)
 		})
 		setIsLoading(false)
 		navigate('/home')

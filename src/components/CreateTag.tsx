@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { ArrowBackCircleOutline } from "react-ionicons";
 import { db } from "../firebase/FirebaseConfig";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -13,15 +12,15 @@ const CreateTag = () => {
 	const handleCloseCreateTag = () => dispatch(closeCreateTag());
 	const darkMode = useAppSelector((state) => state.darkMode.darkMode);
 	const isLoading = useAppSelector((state) => state.tag.isLoading);
-	const setIsLoading = (value) => dispatch(setTagIsLoading(value));
+	const setIsLoading = (value: boolean) => dispatch(setTagIsLoading(value));
 	const [tag, setTag] = useState({
 		emoji: "",
 		value: ""
 	});
-	const [isAdding, setIsAdding] = useState(false);
+	const [, setIsAdding] = useState(false);
 	// ADD TAG TO FIREBASE
 
-	const addTag = (e) => {
+	const addTag = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setIsLoading(false);
 		setIsAdding(true);
@@ -45,7 +44,7 @@ const CreateTag = () => {
 		handleCloseCreateTag()
 	};
 
-	const handleChange = (e) => {
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault();
 		const { name, value } = e.target;
 		setTag((prev) => {
@@ -55,7 +54,7 @@ const CreateTag = () => {
 
 	return (
 		<section className="h-full mx-auto flex justify-center">
-			<Toaster richColors Error position="top-right" />
+			<Toaster richColors position="top-right" />
 
 		<article className=" fixed bottom-0 h-full mx-auto w-full sm:w-1/3 md:w-2/3 lg:w-1/2  dark:bg-black dark:bg-opacity-60 bg-opacity-60 backdrop-blur-lg bg-white transition ease-linear drop-shadow-2xl">
 			<ArrowBackCircleOutline
