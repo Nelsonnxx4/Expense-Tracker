@@ -72,6 +72,7 @@ export const useGetTransactions = () => {
     setTimeout(() => {
       getTransactions();
     }, 2000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount only
   }, []);
 
   return { transactions, transactionTotal, isTransactionAvailable, dayTotal };

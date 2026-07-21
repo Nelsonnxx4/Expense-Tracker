@@ -52,10 +52,10 @@ const TagList = ({ onSelect }: TagListProps) => {
           snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Tag)
         );
         setIsLoading(false);
-        console.log(tags);
       });
     }, 3000);
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount only
   }, []);
 
   const handleCloseTagList = () => dispatch(closeTagList());
